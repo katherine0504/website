@@ -1,0 +1,45 @@
+body {
+  padding-top: 50px;
+  font-family: 微軟正黑體;
+}
+
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.bidding-info {
+  margin: 0px auto;
+  text-align: center;
+}
+
+.bidding-step {
+  display: inline-block;
+  
+  padding: 10px;
+  
+  background-color: #26C9A3;
+  
+  border-bottom: solid 8px #2FEDC1;
+  
+  color: white;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.bidding-form {
+   padding: 15px;
+
+   margin-left: 80px;
+   margin-right: 80px;
+   margin-top: 50px;
+   
+   text-align: left;
+   color: black;
+
+   border: solid 3px gray;
+}
+
+.requiredField {
+  color: red;
+  font-weight: bold;
+}
