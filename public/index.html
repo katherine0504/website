@@ -22,10 +22,12 @@
 
     <!-- Custom styles for this template -->
     <link href="./css/starter-template.css" rel="stylesheet">
+    <link href="./css/style.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="./js/ie-emulation-modes-warning.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -61,70 +63,140 @@
 
       <div class="bidding-info" style=" margin-top:50px; width: 600px" >
         <h1 style="font-weight: bold">拍賣標案基本資料建立</h1>
-        <div>
-          <ul>
-            <li class="bidding-step" style="background-color: #1d967a; border-color: #26C9A3;"> Step 1. 輸入標單</li>
-            <li class="bidding-step"> Step 2. </li>
-            <li class="bidding-step"> Step 3. </li>
-            <li class="bidding-step"> Step 4. </li>
-          </ul>
-        </div>
-        <form class="bidding-form" method="POST" action="/form_submit/">
+        <div id="step-1"> 
+          <div>
+            <ul>
+              <li class="bidding-step current-step"> Step 1. 輸入標單</li>
+              <li class="bidding-step"> Step 2. </li>
+              <li class="bidding-step"> Step 3. </li>
+              <li class="bidding-step"> Step 4. </li>
+            </ul>
+          </div>
+          <form id="step_one_form" class="bidding-form" method="POST" action="/order" data-toggle="validator" onsubmit="return false">
             <div id="div_id_account">
-              <label for="id_account" style="display: inline-block; margin-right: 10px; "> 交易帳號 <span class="requiredField">*</span> </label>
+              <label class="label_style" for="id_account"> 交易帳號 <span class="requiredField">*</span> </label>
               <div style="display: inline-block;">
-                <input class="form-control" id="id_account" maxlength="30" name="account" placeholder="請輸入交易帳號" style="margin-bottom: 10px" type="text" />
+                <input class="form-control" id="id_account" maxlength="30" name="account" placeholder="請輸入交易帳號" type="text" required/>
               </div>
             </div>
 
             <div id="div_id_bidprice">
-              <label for="id_bidprice" style="display: inline-block; margin-right: 10px;"> 投標價格 (元) <span class="requiredField">*</span> </label>
+              <label class="label_style" for="id_bidprice"> 投標價格 (元) <span class="requiredField">*</span> </label>
               <div style="display: inline-block;">
-                <input class="form-control" id="id_bidprice" maxlength="30" name="bidprice" placeholder="請輸入投標價格" style="margin-bottom: 10px" type="text" />
+                <input class="form-control" id="id_bidprice" maxlength="30" name="bidprice" placeholder="請輸入投標價格" type="text" required/>
               </div>
             </div>
 
             <div id="div_id_bidquantity">
-              <label for="id_bidquantity" style="display: inline-block; margin-right: 10px;"> 投標數量 (張) <span class="requiredField">*</span> </label>
+              <label class="label_style" for="id_bidquantity"> 投標數量 (張) <span class="requiredField">*</span> </label>
               <div style="display: inline-block;">
-                <input class="form-control" id="id_bidquantity" maxlength="30" name="bidquantity" placeholder="請輸入投標數量" style="margin-bottom: 10px" type="text" />
+                <input class="form-control" id="id_bidquantity" maxlength="30" name="bidquantity" placeholder="請輸入投標數量" type="text" required/>
               </div>
             </div>
 
             <div id="div_id_idnum">
-              <label for="id_idnum" style="display: inline-block; margin-right: 10px;"> 身分證字號或統一編號 <span class="requiredField">*</span> </label>
+              <label class="label_style" for="id_idnum"> 身分證字號或統一編號 <span class="requiredField">*</span> </label>
               <div style="display: inline-block;">
-                <input class="form-control" id="id_idnum" maxlength="30" name="idnum" placeholder="請輸入身分證字號或統一編號" style="margin-bottom: 10px" type="text" />
+                <input class="form-control" id="id_idnum" maxlength="30" name="idnum" placeholder="請輸入身分證字號或統一編號" type="text" required/>
               </div>
             </div>
 
             <div id="div_id_bday">
-              <label for="id_bday" style="display: inline-block; margin-right: 10px;"> 出生年月日 <span class="requiredField">*</span> </label>
+              <label class="label_style" for="id_bday"> 出生年月日 <span class="requiredField">*</span> </label>
               <div style="display: inline-block;">
-                <input class="form-control" id="id_bday" maxlength="30" name="bday" style="margin-bottom: 10px" type="date" min="1910-01-01" />
+                <input class="form-control" id="id_bday" maxlength="30" name="bday" type="date" min="1910-01-01" required/>
               </div>
             </div>
 
             <div id="div_id_phone">
-              <label for="id_phone" style="display: inline-block; margin-right: 10px;"> 市話 <span class="requiredField">*</span> </label>
+              <label class="label_style" for="id_phone"> 市話 <span class="requiredField">*</span> </label>
               <div style="display: inline-block;">
-                <input class="form-control" id="id_phone" maxlength="30" name="phone" placeholder="請輸入市話" style="margin-bottom: 10px" type="text" />
+                <input class="form-control" id="id_phone" maxlength="30" name="phone" placeholder="請輸入市話" type="text" required/>
               </div>
             </div>
 
             <div id="div_id_cellphone">
-              <label for="id_cellphone" style="display: inline-block; margin-right: 10px;"> 手機號碼 <span class="requiredField">*</span> </label>
+              <label class="label_style" for="id_cellphone"> 手機號碼 <span class="requiredField">*</span> </label>
               <div style="display: inline-block;">
-                <input class="form-control" id="id_cellphone" maxlength="10" name="cellphone" placeholder="請輸入手機號碼" style="margin-bottom: 10px" type="text" />
+                <input class="form-control" id="id_cellphone" maxlength="10" name="cellphone" placeholder="請輸入手機號碼" type="text" required/>
               </div>
             </div>
 
-            <p style="margin-top: 10px; padding: 3px; text-align: center; color: #000000;"><input type='submit' value='送出表單' ></p>
-        </form>
-      </div>
+            <p><input id="to_two_btn" type='submit' value='送出表單'></p>
+          </form>        
+        </div>
 
+        <div id="step-2" style="display:none;">
+          <div>
+            <ul>
+              <li class="bidding-step"> Step 1. </li>
+              <li class="bidding-step current-step" > Step 2. 確認資料 </li>
+              <li class="bidding-step"> Step 3. </li>
+              <li class="bidding-step"> Step 4. </li>
+            </ul>
+          </div>
+          <h1>請注意！您尚未完成投標！</h1>
+          <table class="table table-bordered">
+            <tr>
+              <td>交易帳號</td>
+              <td id="table_id_account"></td>
+            </tr>
+            <tr>
+              <td>投標價格 (元)</td>
+              <td id="table_id_bidprice"></td>
+            </tr>
+            <tr>
+              <td>投標數量 (張)</td>
+              <td id="table_id_bidquantity"></td>
+            </tr>
+            <tr>
+              <td>身分證字號或統一編號</td>
+              <td id="table_id_idnum"></td>
+            </tr>
+            <tr>
+              <td>出生年月日</td>
+              <td id="table_id_bday"></td>
+            </tr>
+            <tr>
+              <td>市話</td>
+              <td id="table_id_phone"></td>
+            </tr>   
+            <tr>
+              <td>手機號碼</td>
+              <td id="table_id_cellphone"></td>
+            </tr>           
+          </table>
+          <p><input id="to_three_btn" type='submit' value='確認資料'></p>
+        </div>
+
+        <div id="step-3" style="display:none;">
+          <div>
+            <ul>
+              <li class="bidding-step"> Step 1. </li>
+              <li class="bidding-step" > Step 2. </li>
+              <li class="bidding-step current-step"> Step 3. 注意與聲明事項</li>
+              <li class="bidding-step"> Step 4. </li>
+            </ul>
+          </div>
+          <h1>確認前，<br>請先仔細閱讀以下注意與聲明事項</h1>
+          <h5>1. 此僅為專題之測試系統，不代表實際交易。<br>2. 您可以在競標截止前的任何時刻取消下單。<br>3. 競價實際截止時間為表定結束時間正負隨機秒數，請勿亂下標以擾亂其他投資人。</h5>
+          <p><input id="read_ckbx" type='checkbox' value='haveread'>  已經詳細閱讀，並同意</p>
+          <p><input id="to_four_btn" type='submit' value='我同意'></p>
+        </div>
+
+        <div id="step-4" style="display:none;">
+          <div>
+            <ul>
+              <li class="bidding-step"> Step 1. </li>
+              <li class="bidding-step" > Step 2. </li>
+              <li class="bidding-step"> Step 3.</li>
+              <li class="bidding-step current-step"> Step 4. 下單完成</li>
+            </ul>
+          </div>
+          <h1>訂單已成立</h1>
+          <h3>您本次的交易編號為：<span id="showOrderID"></span> </h3>
+        </div>
     </div><!-- /.container -->
-
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -134,5 +206,6 @@
     <script src="./js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="./js/ie10-viewport-bug-workaround.js"></script>
+    <script src="./js/main.js"></script>
   </body>
 </html>
