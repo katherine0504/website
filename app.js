@@ -17,6 +17,7 @@ mongoose.Promise = global.Promise;
 // Create Schema for MongoDB
 const collectionName = 'Blockchain';
 const schema = new mongoose.Schema({
+  userID: String,
   orderID: String,
   account: String,
   price: Number,
@@ -24,7 +25,8 @@ const schema = new mongoose.Schema({
   ID: String,
   birthday: Date,
   phone: String,
-  cellphone: String
+  cellphone: String,
+  status: String
 }, { collection: collectionName });
 
 // body parser middleware
@@ -45,6 +47,7 @@ app.post('/order', function(req, res) {
     var orderId = currentdate.getFullYear().toString() + (currentdate.getMonth()+1).toString() + currentdate.getDate().toString() + (c+1).toString();
     
     const data = new orderModel({
+      userID: "test",
       orderID: orderId,
       account: req.body.account,
       price: req.body.bidprice,
@@ -52,7 +55,8 @@ app.post('/order', function(req, res) {
       ID: req.body.idnum,
       birthday: req.body.bday,
       phone: req.body.phone,
-      cellphone: req.body.cellphone
+      cellphone: req.body.cellphone,
+      status: "inAuction"
     });
   
     console.log(data);
@@ -67,8 +71,20 @@ app.post('/order', function(req, res) {
   })
 })
 
-app.get("/ajax_data", function(req, res) {
-  res.send("Ajax !")
+app.post("/order_query", function(req, res) {
+  console.log('QUEST RECEIVED');
+  
+  const orderQuestModel = conn.model(collectionName, schema);
+  
+  var orderList = [];
+  orderQuestModel.find({name: req.body.userID}).exec((err, sresult) => {
+    if (err) console.log('Query failed');
+    else {
+      console.log(sresult);
+      orderList = sresult.orderList;
+      res.send(sresult);
+    }
+  });
 })
 
 app.listen(3000, function() {

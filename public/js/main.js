@@ -1,8 +1,8 @@
 $(document).ready(function() {
     $("#to_two_btn").click(function(){
-        // if($("#step-1").find("input:invalid").length) {
+        if($("#step-1").find("input:invalid").length) {
             
-        // } else {
+        } else {
             $("#table_id_account").text($("#id_account").val());
             $("#table_id_bidprice").text($("#id_bidprice").val());
             $("#table_id_bidquantity").text($("#id_bidquantity").val());
@@ -13,7 +13,7 @@ $(document).ready(function() {
 
             $("#step-1").hide();
             $("#step-2").show();
-        // }
+        }
     })
 
     $("#to_three_btn").click(function(){
@@ -48,6 +48,11 @@ $(document).ready(function() {
         } else {
             alert('請詳細閱讀後勾選同意');
         }
+    })
+
+    $("#to_query").click(function(){
+        $("#step-4").hide();
+        $('#query').show();
     })
 })
 
