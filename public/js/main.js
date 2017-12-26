@@ -1,4 +1,31 @@
 $(document).ready(function() {
+    $("#to_one_btn").click(function() {
+        if ($("#id_stocknum").val().length == 0) {
+            console.log("RRRRRRRRRR");
+        } else {
+            $.ajax({
+                method: "post",
+                url: "./stockquery",
+                data: {
+                    stockNum: $("#id_stocknum").val(),
+                },
+                success: function(res) {
+                    console.log(res);
+                    if (res.length == 0) {
+                        alert('查無此股票編號');
+                        $("#id_stocknum").val('');
+                    } else {
+                        $("#step-0").hide();
+                        $("#step-1").show();
+                    }
+                },
+                error: function(err) {
+                    alert('請詳細閱讀後勾選同意');
+                    console.log(err);
+                }
+            })
+        }
+    })
     $("#to_two_btn").click(function(){
         if($("#step-1").find("input:invalid").length) {
             

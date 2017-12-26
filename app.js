@@ -16,6 +16,8 @@ mongoose.Promise = global.Promise;
 
 // Create Schema for MongoDB
 const collectionName = 'Blockchain';
+const stockCollection = 'StockName';
+
 const schema = new mongoose.Schema({
   userID: String,
   orderID: String,
@@ -28,6 +30,11 @@ const schema = new mongoose.Schema({
   cellphone: String,
   status: String
 }, { collection: collectionName });
+
+const stockSchema = new mongoose.Schema({
+  stockNum: String,
+  endtime: Date,
+}, {collection: stockCollection} );
 
 // body parser middleware
 app.use(bodyParser.json());
@@ -77,7 +84,7 @@ app.post("/order_query", function(req, res) {
   const orderQuestModel = conn.model(collectionName, schema);
   
   var orderList = [];
-  orderQuestModel.find({name: req.body.userID}).exec((err, sresult) => {
+  orderQuestModel.find({userID: req.body.userID}).exec((err, sresult) => {
     if (err) console.log('Query failed');
     else {
       console.log(sresult);
@@ -87,6 +94,21 @@ app.post("/order_query", function(req, res) {
   });
 })
 
+app.post("/stockquery", function(req, res) {
+  console.log('STOCK NUM QUEST RECEIVED');
+
+  const stockNumModel = conn.model(stockCollection, stockSchema);
+
+  stockNumModel.find({stockNum: req.body.stockNum}).exec((err, sresult) => {
+    if (err) {
+      console.log('Query failed');
+      res.send(err);
+    } else {
+      console.log(sresult);
+      res.send(sresult);
+    }
+  })
+})
 app.listen(3000, function() {
   console.log('Server started on Port 3000 .... ');
 })

@@ -59,16 +59,39 @@
     </nav>
 
     <div class="container">
-
       <div class="bidding-info" style=" margin-top:50px; width: 600px" >
         <h1 style="font-weight: bold">拍賣標案基本資料建立</h1>
-        <div id="step-1"> 
+        <div id="step-0">
           <div>
             <ul>
-              <li class="bidding-step current-step"> Step 1. 輸入標單</li>
-              <li class="bidding-step"> Step 2. </li>
+              <li class="bidding-step current-step"> Step 1. 股票編號查詢 </li>
+              <li class="bidding-step" > Step 2. </li>
               <li class="bidding-step"> Step 3. </li>
               <li class="bidding-step"> Step 4. </li>
+              <li class="bidding-step" > Step 5. </li>
+            </ul>
+            <form id="step_zero_form" class="bidding-form" method="POST" action="/stockquery" data-toggle="validator" onsubmit="return false">
+              <div id="div_id_stocknum">
+                <label class="label_style" for="id_stocknum"> 股票編號 <span class="requiredField">*</span> </label>
+                <div style="display: inline-block;">
+                  <input class="form-control" id="id_stocknum" maxlength="6" name="stocknum" placeholder="請輸入股票編號" type="text" required/>
+                </div>
+              </div>
+
+              <p><input id="to_one_btn" type='submit' value='送出表單'></p>  
+            </form>
+          </div>
+          
+        </div>
+        
+        <div id="step-1" style="display:none;"> 
+          <div>
+            <ul>
+              <li class="bidding-step"> Step 1.  </li>
+              <li class="bidding-step current-step"> Step 2. 輸入標單 </li>
+              <li class="bidding-step"> Step 3. </li>
+              <li class="bidding-step"> Step 4. </li>
+              <li class="bidding-step" > Step 5. </li>
             </ul>
           </div>
           <form id="step_one_form" class="bidding-form" method="POST" action="/order" data-toggle="validator" onsubmit="return false">
@@ -129,9 +152,10 @@
           <div>
             <ul>
               <li class="bidding-step"> Step 1. </li>
-              <li class="bidding-step current-step" > Step 2. 確認資料 </li>
-              <li class="bidding-step"> Step 3. </li>
+              <li class="bidding-step" > Step 2.  </li>
+              <li class="bidding-step current-step"> Step 3. 確認資料 </li>
               <li class="bidding-step"> Step 4. </li>
+              <li class="bidding-step" > Step 5. </li>
             </ul>
           </div>
           <h1>請注意！您尚未完成投標！</h1>
@@ -173,8 +197,9 @@
             <ul>
               <li class="bidding-step"> Step 1. </li>
               <li class="bidding-step" > Step 2. </li>
-              <li class="bidding-step current-step"> Step 3. 注意與聲明事項</li>
-              <li class="bidding-step"> Step 4. </li>
+              <li class="bidding-step"> Step 3. </li>
+              <li class="bidding-step current-step"> Step 4. 注意與聲明事項 </li>
+              <li class="bidding-step" > Step 5. </li>
             </ul>
           </div>
           <h1>確認前，<br>請先仔細閱讀以下注意與聲明事項</h1>
@@ -189,7 +214,8 @@
               <li class="bidding-step"> Step 1. </li>
               <li class="bidding-step" > Step 2. </li>
               <li class="bidding-step"> Step 3.</li>
-              <li class="bidding-step current-step"> Step 4. 下單完成</li>
+              <li class="bidding-step"> Step 4. </li>
+              <li class="bidding-step current-step" > Step 5. 下單完成</li>
             </ul>
           </div>
           <h1>訂單已成立</h1>
