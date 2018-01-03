@@ -15,12 +15,18 @@ $(document).ready(function() {
                         alert('查無此股票編號');
                         $("#id_stocknum").val('');
                     } else {
-                        $("#step-0").hide();
-                        $("#step-1").show();
+                        console.log('test endtime: ' + res.endtime);
+                        if (Date.now() < Date.parse(res.endtime)) {
+                            $("#step-0").hide();
+                            $("#step-1").show();
+                        } else {
+                            alert('此股票已結束競價拍賣');
+                            $("#id_stocknum").val('');
+                        }
                     }
                 },
                 error: function(err) {
-                    alert('請詳細閱讀後勾選同意');
+                    alert('錯誤');
                     console.log(err);
                 }
             })
@@ -30,6 +36,7 @@ $(document).ready(function() {
         if($("#step-1").find("input:invalid").length) {
             
         } else {
+            $("#table_id_stocknum").text($("#id_stocknum").val());
             $("#table_id_account").text($("#id_account").val());
             $("#table_id_bidprice").text($("#id_bidprice").val());
             $("#table_id_bidquantity").text($("#id_bidquantity").val());
@@ -54,6 +61,7 @@ $(document).ready(function() {
                 method: "post",
                 url: "./order",
                 data: {
+                    stocknum: $("#id_stocknum").val(),
                     account: $("#id_account").val(),
                     bidprice: $("#id_bidprice").val(),
                     bidquantity: $("#id_bidquantity").val(),
@@ -82,18 +90,3 @@ $(document).ready(function() {
         $('#query').show();
     })
 })
-
- // // Example starter JavaScript for disabling form submissions if there are invalid fields
-// (function() {
-//   "use strict";
-//   window.addEventListener("load", function() {
-//     var form = document.getElementById("stepOneForm");
-//     form.addEventListener("submit", function(event) {
-//       if (form.checkValidity() == false) {
-//         event.preventDefault();
-//         event.stopPropagation();
-//       }
-//       form.classList.add("was-validated");
-//     }, false);
-//   }, false);
-// }());

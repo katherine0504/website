@@ -67,7 +67,7 @@
             <div id="div_id_userID">
               <label class="label_style" for="id_userID"> 請輸入你的使用者名稱 <span class="requiredField">*</span> </label>
               <div style="display: inline-block;">
-                <input class="form-control" id="id_phone" maxlength="30" name="phone" placeholder="請輸入使用者名稱" type="text" required/>
+                <input class="form-control" id="id_userID" maxlength="30" name="phone" placeholder="請輸入使用者名稱" type="text" required/>
               </div>
             </div>
             <p style="text-align: center; margin-top:10px"><input id="quest_query" type='submit' value='確認' ></p>
@@ -75,7 +75,15 @@
         </div>
         <div id="result" style="display:none">
           <h4> 您過去的交易紀錄共有 <span id="numofOrder"></span> 筆 <br>詳細資料如下 </h4>
-          <ul id="query_result"> </ul>
+          <table id="query_result" class="table table-boarded"> 
+            <tr>
+              <td> 訂單編號 </td>
+              <td> 股票編號 </td>
+              <td> 交易價格 </td>
+              <td> 交易張數 </td>
+              <td> 刪除訂單 </td>
+            </tr>
+          </table>
         </div>
     </div><!-- /.container -->
 
@@ -90,3 +98,4 @@
     <script src="./js/query.js"></script>
   </body>
 </html>
+

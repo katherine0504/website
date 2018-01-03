@@ -7,6 +7,23 @@ const expressValidator = require('express-validator');
 const path = require('path');
 const app = express();
 
+//multichain
+let multichain = require("multichain-node")({
+  port: 6482,
+  host: '140.116.177.150',
+  user: "multichainrpc",
+  pass: "AN3g3YkkLMbgBFaWJ48mTy25krTLYyXKTxqtgh3FxqoL"
+});
+
+multichain.getInfo((err, info) => {
+  if(err){
+      throw err;
+  }
+  console.log(info);
+})
+
+multichain.liststreams;
+
 // MongoDB connection
 const conn = mongoose.connect(url, { useMongoClient: true }, (err, res) => {
 	if (err) console.log('MongoDB connection failed: ', err);
@@ -19,6 +36,7 @@ const collectionName = 'Blockchain';
 const stockCollection = 'StockName';
 
 const schema = new mongoose.Schema({
+  stocknum: String,
   userID: String,
   orderID: String,
   account: String,
@@ -34,6 +52,8 @@ const schema = new mongoose.Schema({
 const stockSchema = new mongoose.Schema({
   stockNum: String,
   endtime: Date,
+  actualEndtime: Date,
+  checked: Number
 }, {collection: stockCollection} );
 
 // body parser middleware
@@ -54,6 +74,7 @@ app.post('/order', function(req, res) {
     var orderId = currentdate.getFullYear().toString() + (currentdate.getMonth()+1).toString() + currentdate.getDate().toString() + (c+1).toString();
     
     const data = new orderModel({
+      stocknum: req.body.stocknum,
       userID: "test",
       orderID: orderId,
       account: req.body.account,
@@ -85,6 +106,7 @@ app.post("/order_query", function(req, res) {
   
   var orderList = [];
   orderQuestModel.find({userID: req.body.userID}).exec((err, sresult) => {
+    console.log("req userid: " + req.body.userID)
     if (err) console.log('Query failed');
     else {
       console.log(sresult);
@@ -105,11 +127,77 @@ app.post("/stockquery", function(req, res) {
       res.send(err);
     } else {
       console.log(sresult);
-      res.send(sresult);
+      res.send(sresult[0]);
     }
-  })
+  });
 })
+
+app.post("/delete_order", function(req, res) {
+  console.log('Delete request received');
+
+  const orderDeleteModel = conn.model(collectionName, schema);
+  const stockNumModel = conn.model(stockCollection, stockSchema);
+  
+  orderDeleteModel.findOne({orderID: req.body.orderid}).exec((err, sresult) => {
+    console.log('First sresult: '+ sresult);
+    if (err) {
+      console.log('OrderID Query failed');
+      res.send(err);
+    } else {
+      stockNumModel.findOne({stockNum: sresult.stocknum}).exec((err, sresult) => {
+        console.log('Second sresult: '+ sresult);
+        if (err) {
+          console.log('Query failed');
+          res.send(err);
+        } else {
+          if (Date.now() < Date.parse(sresult.endtime)) {
+            orderDeleteModel.remove({orderID: req.body.orderid}, function(err) {
+              if (err) {
+                console.log('Delete not successful');
+                res.send(err);
+              } else {
+                console.log("Successly deleted order");
+                res.send('OK');
+              }
+            });
+          } else {
+            res.send('Timeout');
+          }
+        }
+      });
+    }
+  });
+    
+})
+
 app.listen(3000, function() {
   console.log('Server started on Port 3000 .... ');
 })
 
+
+function checkEndingTime() {
+  var curDate = new Date();
+
+  if(curDate.getHours() == 23 && curDate.getMinutes() == 50) {
+    const stockModel = conn.model(stockCollection, stockSchema);
+    stockModel.find().exec((err, sresult) => {
+      if (err) console.log('Query failed');
+      else {
+        for (result of sresult) {
+          var d1 = new Date(result.endtime);
+
+          if (curDate.getFullYear() == d1.getFullYear() && curDate.getDate() == d1.getDate() && curDate.getMonth() == d1.getMonth() && result.checked == 0) {
+            var randNum = Math.floor(Math.random() *(240000) + (-120000));
+            result.endtime = new Date(result.endtime.getTime() + (randNum));
+            result.checked = 1;
+            result.save();
+          }
+        }
+      }
+    });
+  } else if (curDate.getHours() == 0 && curDate.getMinutes() == 5) {
+    //push to blockchain
+  }
+}
+  
+setInterval(checkEndingTime, 10*1000);
