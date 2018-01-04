@@ -6,13 +6,14 @@ const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const path = require('path');
 const app = express();
+const SHA256 = require("crypto-js/sha256");
 
 //multichain
 let multichain = require("multichain-node")({
   port: 6482,
   host: '140.116.177.150',
-  user: "multichainrpc",
-  pass: "AN3g3YkkLMbgBFaWJ48mTy25krTLYyXKTxqtgh3FxqoL"
+  user: 'multichainrpc',
+  pass: config.multichain.pass,
 });
 
 multichain.getInfo((err, info) => {
@@ -52,7 +53,6 @@ const schema = new mongoose.Schema({
 const stockSchema = new mongoose.Schema({
   stockNum: String,
   endtime: Date,
-  actualEndtime: Date,
   checked: Number
 }, {collection: stockCollection} );
 
@@ -174,11 +174,10 @@ app.listen(3000, function() {
   console.log('Server started on Port 3000 .... ');
 })
 
-
 function checkEndingTime() {
   var curDate = new Date();
 
-  if(curDate.getHours() == 23 && curDate.getMinutes() == 50) {
+  if(curDate.getHours() == 23 && curDate.getMinutes() >= 50) {
     const stockModel = conn.model(stockCollection, stockSchema);
     stockModel.find().exec((err, sresult) => {
       if (err) console.log('Query failed');
@@ -195,9 +194,43 @@ function checkEndingTime() {
         }
       }
     });
-  } else if (curDate.getHours() == 0 && curDate.getMinutes() == 5) {
+  } else if (curDate.getHours() == 00 && curDate.getMinutes() >= 5 && curDate.getMinutes() <= 10) {
     //push to blockchain
+    const orderModel = conn.model(collectionName, schema);
+    
+    orderModel.findOne({status: "inAuction"}).exec((err, sresult) => {
+      if (err) console.log('In Auction Query Failed');
+      else {
+        console.log(sresult);
+        console.log("Ready to push " + sresult.orderID);
+        console.log("JSON string: " + JSON.stringify(sresult));
+        var dataToadd = SHA256(JSON.stringify(sresult)).toString();
+
+        console.log("SHA256: " + dataToadd);
+
+        multichain.publish({
+          stream: "stream1",
+          key: config.multichain.stream1Key,
+          data: dataToadd 
+        },
+          (err) => {
+            if (err) {
+              console.log("Publish failure");
+              console.log(err);
+            } else {
+              console.log("Publish success");
+              sresult.status = "End auction";
+              sresult.save();
+            }
+          }
+        );
+
+        // for (result of sresult) {
+        //   console.log("Ready to push " + result.orderID);
+        //   var dataToadd = new Buffer(result).toString("hex");
+        //   console.log("Hex form: " + dataToadd);
+        // }
+      }
+    })
   }
 }
-  
-setInterval(checkEndingTime, 10*1000);

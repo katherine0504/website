@@ -2,9 +2,15 @@ config = {
 	'mongo': {
 		'user': '',
 		'password': '',
-    'dbname': '',
-    'host': '' ,
+    	'dbname': '',
+    	'host': '.' ,
 	},
+	'multichain': {
+		'key': '',
+		'user':'',
+		'pass': '',
+		'stream1Key': ''
+	}
 }
 
 module.exports = config;
